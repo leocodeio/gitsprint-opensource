@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script
+      async
+      src="https://analytics.leocode.tech/tracker.js"
+      data-website-id="cmexm8ey20001jy04xmrwpoap"
+    ></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GitSprint - Open Source Development Platform</title>
+    <link rel="icon" href="apps/web/public/favicon.ico" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter",
+          sans-serif;
+        line-height: 1.6;
+        color: #e4e4e7;
+        background: #0a0a0a;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      .hero-section {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        background:
+          radial-gradient(
+            circle at 20% 80%,
+            rgba(120, 119, 198, 0.3) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(255, 119, 198, 0.3) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 40% 40%,
+            rgba(120, 119, 198, 0.2) 0%,
+            transparent 50%
+          );
+      }
+
+      .hero-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsIDI1NSwgMjU1LCAwLjEpIi8+Cjwvc3ZnPg==")
+          repeat;
+        opacity: 0.5;
+      }
+
+      .container {
+        max-width: 1200px;
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero {
+        background: rgba(10, 10, 10, 0.8);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        padding: 4rem 3rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow:
+          0 25px 50px -12px rgba(0, 0, 0, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        position: relative;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(120, 119, 198, 0.1) 0%,
+          rgba(255, 119, 198, 0.1) 100%
+        );
+        border-radius: 24px;
+        pointer-events: none;
+      }
+
+      .logo-container {
+        margin: 0 auto 3rem;
+        position: relative;
+        z-index: 2;
+      }
+
+      .logo {
+        width: 140px;
+        height: auto;
+        filter: drop-shadow(0 10px 30px rgba(120, 119, 198, 0.3));
+        transition: all 0.3s ease;
+      }
+
+      .logo:hover {
+        filter: drop-shadow(0 15px 40px rgba(120, 119, 198, 0.5));
+        transform: translateY(-2px);
+      }
+
+      h1 {
+        font-size: 4rem;
+        font-weight: 900;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #7877c6, #ff77c6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -0.02em;
+        position: relative;
+        z-index: 2;
+      }
+
+      .tagline {
+        font-size: 1.5rem;
+        color: #a1a1aa;
+        margin-bottom: 2rem;
+        font-weight: 400;
+        letter-spacing: 0.01em;
+        position: relative;
+        z-index: 2;
+      }
+
+      .description {
+        font-size: 1.2rem;
+        color: #d4d4d8;
+        margin-bottom: 3rem;
+        line-height: 1.8;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        font-weight: 300;
+        position: relative;
+        z-index: 2;
+      }
+
+      .cta-buttons {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 4rem;
+        position: relative;
+        z-index: 2;
+      }
+
+      .btn {
+        padding: 1.2rem 2.5rem;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .btn:hover::before {
+        left: 100%;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #7877c6, #ff77c6);
+        color: white;
+        box-shadow: 0 8px 25px rgba(120, 119, 198, 0.3);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(120, 119, 198, 0.4);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: #e4e4e7;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+      }
+
+      .btn-secondary:hover {
+        border-color: #7877c6;
+        background: rgba(120, 119, 198, 0.1);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(120, 119, 198, 0.2);
+      }
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+        position: relative;
+        z-index: 2;
+      }
+
+      .feature {
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .feature::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #7877c6, #ff77c6);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+      }
+
+      .feature:hover::before {
+        transform: scaleX(1);
+      }
+
+      .feature:hover {
+        transform: translateY(-5px);
+        border-color: rgba(120, 119, 198, 0.3);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+        filter: grayscale(0);
+      }
+
+      .feature h3 {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+        color: #f4f4f5;
+        font-weight: 600;
+      }
+
+      .feature p {
+        color: #a1a1aa;
+        font-size: 1rem;
+        line-height: 1.6;
+      }
+
+      .footer {
+        margin-top: 4rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        color: #71717a;
+        font-size: 0.9rem;
+        position: relative;
+        z-index: 2;
+      }
+
+      .github-icon {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+      }
+
+      @media (max-width: 768px) {
+        .hero {
+          padding: 3rem 2rem;
+        }
+
+        h1 {
+          font-size: 3rem;
+        }
+
+        .tagline {
+          font-size: 1.3rem;
+        }
+
+        .description {
+          font-size: 1.1rem;
+        }
+
+        .cta-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .btn {
+          width: 100%;
+          max-width: 300px;
+          justify-content: center;
+        }
+
+        .features {
+          grid-template-columns: 1fr;
+        }
+
+        .logo {
+          width: 120px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .hero {
+          padding: 2rem 1.5rem;
+        }
+
+        h1 {
+          font-size: 2.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero-section">
+      <div class="container">
+        <div class="hero">
+          <div class="logo-container">
+            <img
+              src="apps/web/public/logo-dark.png"
+              alt="GitSprint Logo"
+              class="logo"
+            />
+          </div>
+
+          <h1>GitSprint</h1>
+          <p class="tagline">Accelerate Your Development Workflow</p>
+
+          <p class="description">
+            GitSprint is a powerful open source codebase that empowers
+            developers to streamline their git workflow, enhance collaboration,
+            and boost productivity. Built with modern technologies and designed
+            for teams who value efficiency, transparency, and innovation.
+          </p>
+
+          <div class="cta-buttons">
+            <a
+              href="https://github.com/leocodeio/gitsprint/blob/main/CONTRIBUTING.md"
+              target="_blank"
+              class="btn btn-primary"
+            >
+              🚀 Get Started
+            </a>
+            <a
+              href="https://github.com/leocodeio/gitsprint.git"
+              target="_blank"
+              class="btn btn-secondary"
+            >
+              <svg class="github-icon" viewBox="0 0 24 24">
+                <path
+                  d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"
+                />
+              </svg>
+              View on GitHub
+            </a>
+          </div>
+
+          <div class="features">
+            <div class="feature">
+              <div class="feature-icon">⚡</div>
+              <h3>Lightning Fast</h3>
+              <p>
+                Optimized performance with modern architecture and cutting-edge
+                technologies for maximum speed
+              </p>
+            </div>
+
+            <div class="feature">
+              <div class="feature-icon">🛠️</div>
+              <h3>Developer First</h3>
+              <p>
+                Built by developers, for developers with intuitive APIs,
+                comprehensive docs, and powerful tooling
+              </p>
+            </div>
+
+            <div class="feature">
+              <div class="feature-icon">🌐</div>
+              <h3>Open Source</h3>
+              <p>
+                Completely open source with an active community, regular
+                updates, and transparent development
+              </p>
+            </div>
+
+            <div class="feature">
+              <div class="feature-icon">🔐</div>
+              <h3>Enterprise Ready</h3>
+              <p>
+                Production-grade security, comprehensive testing, monitoring,
+                and enterprise-level reliability
+              </p>
+            </div>
+          </div>
+
+          <div class="footer">
+            <p>
+              &copy; 2025 GitSprint. Open source project licensed under MIT.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
