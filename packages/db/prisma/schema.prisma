@@ -1,0 +1,326 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean
+  image         String?
+  createdAt     DateTime
+  updatedAt     DateTime
+  sessions      Session[]
+  accounts      Account[]
+
+  subscriptions       Subscription[]
+  payments            Payment[]
+  ownedOrganizations  Organization[]
+  organizationMembers OrganizationMember[]
+  teamMembers         TeamMember[]
+  assignedStories     Story[]
+
+  role             String?
+  phone            String?
+  phoneVerified    Boolean?
+  profileCompleted Boolean?
+  subscriptionId   String?
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+
+model Subscription {
+  id                  String    @id @default(cuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId              String?
+  planSlug            String?
+  status              String?
+  startDate           DateTime? @default(now())
+  endDate             DateTime?
+  canceledAt          DateTime?
+  polarCheckoutId     String?
+  polarSubscriptionId String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@map("subscription")
+  @@unique([polarCheckoutId])
+  @@unique([userId])
+}
+
+model Payment {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount       Float
+  currency     String
+  status       String
+  polarOrderId String
+  checkoutId   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("payment")
+}
+
+model Test {
+  id   String @id @default(cuid())
+  name String
+}
+
+model LogEntry {
+  id            String   @id @default(uuid())
+  level         String
+  message       String
+  correlationId String
+  metadata      Json?
+  context       Json?
+  type          String?
+  method        String?
+  url           String?
+  statusCode    Int?
+  duration      String?
+  error         Json?
+  createdAt     DateTime @default(now())
+
+  @@map("logs")
+}
+
+// SaaS Models
+
+model Organization {
+  id        String               @id @default(cuid())
+  name      String
+  slug      String               @unique
+  ownerId   String
+  owner     User                 @relation(fields: [ownerId], references: [id])
+  members   OrganizationMember[]
+  teams     Team[]
+  projects  Project[]
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+
+  @@map("organizations")
+}
+
+model OrganizationMember {
+  id           String                 @id @default(cuid())
+  role         OrganizationMemberRole @default(MEMBER)
+  orgId        String
+  userId       String
+  organization Organization           @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  user         User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+
+  @@unique([orgId, userId])
+  @@map("organization_members")
+}
+
+model Team {
+  id           String       @id @default(cuid())
+  name         String
+  description  String?
+  orgId        String
+  organization Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  members      TeamMember[]
+  projects     Project[]
+  sprints      Sprint[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@map("teams")
+}
+
+model TeamMember {
+  id        String         @id @default(cuid())
+  role      TeamMemberRole @default(MEMBER)
+  teamId    String
+  userId    String
+  team      Team           @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@unique([teamId, userId])
+  @@map("team_members")
+}
+
+model Project {
+  id               String            @id @default(cuid())
+  name             String
+  description      String?
+  githubRepoUrl    String?
+  orgId            String
+  teamId           String
+  organization     Organization      @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  team             Team              @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  sprints          Sprint[]
+  stories          Story[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  githubRepository GithubRepository?
+
+  @@map("projects")
+}
+
+model Sprint {
+  id        String       @id @default(cuid())
+  name      String
+  goal      String?
+  startDate DateTime
+  endDate   DateTime
+  status    SprintStatus @default(PLANNING)
+  projectId String
+  teamId    String
+  project   Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  team      Team         @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  stories   Story[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@map("sprints")
+}
+
+model Story {
+  id          String       @id @default(cuid())
+  title       String
+  description String?
+  points      Int?
+  priority    Priority     @default(MEDIUM)
+  status      StoryStatus  @default(TODO)
+  assigneeId  String?
+  assignee    User?        @relation(fields: [assigneeId], references: [id])
+  projectId   String
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  sprintId    String?
+  sprint      Sprint?      @relation(fields: [sprintId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  githubIssue GithubIssue?
+
+  @@map("stories")
+}
+
+// Enums
+
+enum OrganizationMemberRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum TeamMemberRole {
+  LEAD
+  MEMBER
+}
+
+enum SprintStatus {
+  DRAFT
+  PLANNING
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum StoryStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model GithubRepository {
+  id           String        @id @default(cuid())
+  githubRepoId BigInt        @unique
+  name         String
+  fullName     String        @unique
+  private      Boolean
+  htmlUrl      String
+  description  String?
+  projectId    String        @unique
+  project      Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  issues       GithubIssue[]
+
+  @@map("github_repositories")
+}
+
+model GithubIssue {
+  id         BigInt           @id
+  number     Int
+  title      String
+  body       String?
+  state      String
+  htmlUrl    String
+  repoId     String
+  repository GithubRepository @relation(fields: [repoId], references: [id], onDelete: Cascade)
+  storyId    String?          @unique
+  story      Story?           @relation(fields: [storyId], references: [id])
+
+  @@unique([repoId, number])
+  @@map("github_issues")
+}
