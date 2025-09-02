@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/leocodeio/gitsprint-opensource/compare/v1.0.0...v1.0.1) (2025-09-02)
+
+
+### Performance Improvements
+
+* **updated html:** updated html ([6f7bed7](https://github.com/leocodeio/gitsprint-opensource/commit/6f7bed7da928d040ea3a0e3a15fd06ee867fa328))
+
 # 1.0.0 (2025-09-01)
 
 
